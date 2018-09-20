@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, url_for, sessions, redirect
-
+from flask import Flask, render_template, request, url_for, sessions, redirect, g
+import sqlite3
+from flaskext.mysql import MySQL
 from flask_session import Session
 from flask_wtf import FlaskForm, form
 from wtforms import StringField, SubmitField, PasswordField
@@ -8,9 +9,22 @@ from wtforms.validators import DataRequired
 app = Flask(__name__)
 app.secret_key = "12345"
 
+DATABASE = 'C:\\Users\\Admin\\PycharmProjects\\ArticleMenager\\db.db'
+
+# Mysql configuration
+mysql = MySQL(app)
+
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_PORT'] = '3306'
+app.config['MYSQL_DATABASE_USER'] = ''
+app.config['MYSQL_DATABASE_PASSWORD'] = ''
+app.config['MYSQL_DATABASE_DB'] = 'article'
+
+conn = mysql.connect()
 
 
 class MyForm(FlaskForm):
+    """ Login form """
     name = StringField("Login", validators=[DataRequired()])
     password = PasswordField("Haslo", validators=[DataRequired()])
     submit = SubmitField("Zaloguj")
